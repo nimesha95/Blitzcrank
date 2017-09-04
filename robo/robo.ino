@@ -21,11 +21,11 @@ HMC5883L_Simple Compass;
 #define C_Trig 32 //Center
 #define C_Echo 42
 
-#define L_Trig 30 //Left
-#define L_Echo 40 
+#define L_Trig 34 //Left || Changed to right
+#define L_Echo 44
 
-#define R_Trig 34 //Right
-#define R_Echo 44
+#define R_Trig 30 //Right || Changed to left
+#define R_Echo 40
 
 int maximumRange = 10 ;// Maximum range needed
 int minimumRange = 3; //Minimum range needed
