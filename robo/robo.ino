@@ -21,7 +21,7 @@ HMC5883L_Simple Compass;
 #define C_Trig 32 //Center
 #define C_Echo 42
 
-#define L_Trig 34 //Left || Changed to right
+#define L_Trig 34 //Left || Changed to right  
 #define L_Echo 44
 
 #define R_Trig 30 //Right || Changed to left
@@ -121,9 +121,11 @@ void loop() {
     if(CDistance > maxCenterRange){ //normal forward 
         Forward();
       }
-     else if(RDistance >= maximumRange){  //right is free ; turn right
+     else if(CDistance <= maxCenterRange && RDistance >= maximumRange){  //center is blocked, right is free ; turn right || code executed 
+      Serial.print("I reached here");
+      Serial.print("\n");
         if(hippoR){
-          targetRHeading=getTarRHeading();  //used to get the target heading only once            
+          targetRHeading=getTarRHeading();  //used to get the target heading only once  || Problem is here           
         }
         TurnRight();
       }
@@ -230,7 +232,7 @@ void TurnRight(){
   
   int whilecount=0; //this is used to track the while loop count
   
-  while(heading<targetRHeading){
+  while(heading>targetRHeading){
         whilecount += 1;
       
         Serial.print("Turning Right ");
@@ -265,14 +267,15 @@ void TurnRight(){
 
   void Forward(){
     //forward is backward... backward is forward
-    //Serial.print("Forward");
-    //Serial.print("\n");
+    Serial.print("Forward");
+    Serial.print("\n");
     Rmotor.setSpeed(MSpeed);
     Lmotor.setSpeed(MSpeed);
     Rmotor.run(BACKWARD);
     Lmotor.run(BACKWARD);
     delay(t);
 
+    //Caliberating the motion 
     LDistance = LeftPulse();
     if(LDistance > maximumRange){
           Rmotor.run(BACKWARD);
@@ -297,6 +300,9 @@ void TurnRight(){
 }
 
   void Halt(){
+
+    Serial.print("All 3 sides free || On Halt");
+    Serial.print("\n");
     Rmotor.run(RELEASE);
     Lmotor.run(RELEASE);
     }
